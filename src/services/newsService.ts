@@ -10,7 +10,7 @@ export interface FetchNewsOptions {
 
 export async function fetchNews(options: FetchNewsOptions): Promise<INewsResponseProps> {
   const { type = 'noticia', page, itemsPerPage, from, search } = options;
-  let url = `http://servicodados.ibge.gov.br/api/v3/noticias/?tipo=${type}`;
+  let url = `https://servicodados.ibge.gov.br/api/v3/noticias/?tipo=${type}`;
 
   if (page) {
     url += `&page=${page}`;
