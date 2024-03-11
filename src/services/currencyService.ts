@@ -1,3 +1,4 @@
+'use server';
 import { CurrencyResponse } from '@/interface/ICurrency';
 
 async function fetchCurrencyData(currencies: string): Promise<CurrencyResponse> {

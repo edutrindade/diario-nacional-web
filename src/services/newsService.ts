@@ -1,3 +1,4 @@
+'use server';
 import { INewsResponseProps } from '@/interface/INews';
 
 export interface FetchNewsOptions {
