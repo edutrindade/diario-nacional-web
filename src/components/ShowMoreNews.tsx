@@ -1,10 +1,5 @@
 import React from 'react';
-
-interface IShowMoreNewsProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}
+import { IShowMoreNewsProps } from '@/interface/IShowMoreNews';
 
 const ShowMoreNews = ({ currentPage, totalPages, onPageChange }: IShowMoreNewsProps) => {
   const handleNextPage = () => {

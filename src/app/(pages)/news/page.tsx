@@ -1,22 +1,21 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import LayoutDefault from '@/app/LayoutDefault';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { INews } from '@/interface/INews';
 import { fetchNews } from '@/services/newsService';
-import ShowMoreNews from '@/components/ShowMoreNews';
-import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
+import ShowMoreNews from '@/components/ShowMoreNews';
 import { useQuery } from 'react-query';
 
-export default function Social() {
+export default function News() {
   const router = useRouter();
-  const [socialNews, setSocialNews] = useState<INews[]>([]);
+  const [news, setNews] = useState<INews[]>([]);
   const [page, setPage] = useState<number>(1);
-  const itemsPerPage = 300;
+  const itemsPerPage = 24;
 
   const { data, isLoading, isError, error, refetch } = useQuery(
-    ['social', { type: 'noticia', page }],
+    ['news', { type: 'noticia', page }],
     () => fetchNews({ type: 'noticia', page, itemsPerPage }),
     {
       keepPreviousData: true,
@@ -28,12 +27,10 @@ export default function Social() {
 
   useEffect(() => {
     if (data?.items) {
-      const filteredNews = data.items.filter((newsItem) => newsItem.editorias.includes('sociais'));
-
       if (page > 1) {
-        setSocialNews((prevNews) => [...prevNews, ...filteredNews]);
+        setNews((prevNews) => [...prevNews, ...data.items]);
       } else {
-        setSocialNews(filteredNews);
+        setNews(data.items);
       }
     }
   }, [data, page]);
@@ -45,38 +42,37 @@ export default function Social() {
 
   const handleNewsClick = (newsItem: INews) => {
     localStorage.setItem('selectedNewsItem', JSON.stringify(newsItem));
-    router.push(`/social/${newsItem.id}`);
+    router.push(`/news/${newsItem.id}`);
   };
 
   if (isError) {
     return <div>Error: {error as string}</div>;
   }
 
-  if (isLoading || socialNews?.length === 0) {
+  if (isLoading || news?.length === 0) {
     return <Loading />;
   }
 
   const renderNewsItem = (newsItem: INews) => (
-    <div key={newsItem.id} className='group' onClick={() => handleNewsClick(newsItem)}>
+    <div className='group' onClick={() => handleNewsClick(newsItem)}>
       <div className='group-hover:text-blue-900 cursor-pointer'>
         <p className='text-2xl font-semibold'>{newsItem.titulo}</p>
         <p className='text-gray-600 text-md'>{newsItem.introducao}</p>
-        <p className='text-gray-400 text-sm mt-1'>{newsItem.data_publicacao}</p>
       </div>
     </div>
   );
 
   return (
-    <LayoutDefault>
+    <div>
       <section className='container mx-auto py-8'>
         <div className='grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6 mb-2'>
           <div className='bg-white cursor-pointer mb-6 relative overflow-hidden'>
-            <div className='group' onClick={() => handleNewsClick(socialNews[0])}>
+            <div className='group' onClick={() => handleNewsClick(news[0])}>
               <Image
                 src={`https://agenciadenoticias.ibge.gov.br/${
-                  JSON.parse(socialNews[0].imagens).image_fulltext
+                  JSON.parse(news[0].imagens).image_fulltext
                 }`}
-                alt={socialNews[0].titulo}
+                alt={news[0].titulo}
                 layout='responsive'
                 width={600}
                 height={400}
@@ -86,35 +82,48 @@ export default function Social() {
 
               <div className='absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white'>
                 <div className='text-xl lg:text-3xl md:text-xxl sm:text-xl xs:text-sm max-w-full font-semibold'>
-                  {socialNews[0].titulo}
+                  {news[0].titulo}
                 </div>
               </div>
             </div>
           </div>
 
           <div className='flex gap-6 flex-col mb-8'>
-            {socialNews.slice(1, 4).map((newsItem, index) => (
+            {news.slice(1, 4).map((newsItem, index) => (
               <React.Fragment key={index}>
-                <div className='group' onClick={() => handleNewsClick(newsItem)}>
-                  <div className='group-hover:text-blue-900 cursor-pointer'>
-                    <p className='text-2xl font-semibold'>{newsItem.titulo}</p>
-                    <p className='text-gray-600 text-md'>{newsItem.introducao}</p>
-                    <p className='text-gray-400 text-sm'>{newsItem.data_publicacao}</p>
-                  </div>
-                </div>
+                {renderNewsItem(newsItem)}
+                {index < 2 && <div className='border-b border-gray-300'></div>}
               </React.Fragment>
             ))}
           </div>
         </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6'>
-          {socialNews.slice(4).map((news, index) => (
-            <React.Fragment key={index}>{renderNewsItem(news)}</React.Fragment>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
+          {news.slice(4).map((news, index) => (
+            <div key={index} className='bg-white cursor-pointer'>
+              <div className='group' onClick={() => handleNewsClick(news)}>
+                <Image
+                  src={`https://agenciadenoticias.ibge.gov.br/${
+                    JSON.parse(news.imagens).image_fulltext
+                  }`}
+                  alt={news.titulo}
+                  layout='responsive'
+                  width={300}
+                  height={200}
+                  objectFit='cover'
+                  className='transition-transform duration-500 ease-in-out transform group-hover:scale-105'
+                />
+                <div className='py-2 group-hover:text-blue-900'>
+                  <h3 className='text-xl font-semibold mb-2'>{news.titulo}</h3>
+                  <p className='text-gray-600'>{news.data_publicacao}</p>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
-      </section>
 
-      <ShowMoreNews currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
-    </LayoutDefault>
+        <ShowMoreNews currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
+      </section>
+    </div>
   );
 }

@@ -7,36 +7,52 @@ import { fetchNews } from '@/services/newsService';
 import ShowMoreNews from '@/components/ShowMoreNews';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
+import { useQuery } from 'react-query';
 
 export default function Geociencia() {
   const router = useRouter();
   const [geosciencsNews, setGeosciencesNews] = useState<INews[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
   const itemsPerPage = 300;
 
+  const { data, isLoading, isError, error, refetch } = useQuery(
+    ['geociencia', { type: 'noticia', page }],
+    () => fetchNews({ type: 'noticia', page, itemsPerPage }),
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const totalPages = data?.totalPages || 0;
+
   useEffect(() => {
-    const loadNews = async () => {
-      try {
-        const newsResponse = await fetchNews({ type: 'noticia', page, itemsPerPage });
-        setTotalPages(newsResponse.totalPages);
+    if (data?.items) {
+      const filteredNews = data.items.filter((newsItem) =>
+        newsItem.editorias.includes('geociencia')
+      );
 
-        const filteredNews = newsResponse.items.filter((newsItem) =>
-          newsItem.editorias.includes('geociencias')
-        );
-
-        if (page > 1) {
-          setGeosciencesNews((prevNews) => [...prevNews, ...filteredNews]);
-        } else {
-          setGeosciencesNews(filteredNews);
-        }
-      } catch (error) {
-        console.error('Error fetching news:', error);
+      if (page > 1) {
+        setGeosciencesNews((prevNews) => [...prevNews, ...filteredNews]);
+      } else {
+        setGeosciencesNews(filteredNews);
       }
-    };
+    }
+  }, [data, page]);
 
-    loadNews();
-  }, [page]);
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    refetch();
+  };
+
+  if (geosciencsNews.length === 0) {
+    return <Loading />;
+  }
+
+  const handleNewsClick = (newsItem: INews) => {
+    localStorage.setItem('selectedNewsItem', JSON.stringify(newsItem));
+    router.push(`/geociencia/${newsItem.id}`);
+  };
 
   const renderNewsItem = (newsItem: INews) => (
     <div key={newsItem.id} className='group' onClick={() => handleNewsClick(newsItem)}>
@@ -47,19 +63,6 @@ export default function Geociencia() {
       </div>
     </div>
   );
-
-  if (geosciencsNews.length === 0) {
-    return <Loading />;
-  }
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleNewsClick = (newsItem: INews) => {
-    localStorage.setItem('selectedNewsItem', JSON.stringify(newsItem));
-    router.push(`/geociencia/${newsItem.id}`);
-  };
 
   return (
     <LayoutDefault>
@@ -80,7 +83,7 @@ export default function Geociencia() {
               />
 
               <div className='absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white'>
-                <div className='text-3xl lg:text-3xl md:text-xxl sm:text-xl xs:text-sm max-w-full font-semibold'>
+                <div className='text-xl lg:text-3xl md:text-xxl sm:text-xl xs:text-sm max-w-full font-semibold'>
                   {geosciencsNews[0].titulo}
                 </div>
               </div>

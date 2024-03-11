@@ -80,7 +80,7 @@ export default function Economica() {
               />
 
               <div className='absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white'>
-                <div className='text-3xl lg:text-3xl md:text-xxl sm:text-xl xs:text-sm max-w-full font-semibold'>
+                <div className='text-xl lg:text-3xl md:text-xxl sm:text-xl xs:text-sm max-w-full font-semibold'>
                   {economicNews[0].titulo}
                 </div>
               </div>

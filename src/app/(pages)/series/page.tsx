@@ -7,36 +7,56 @@ import { fetchNews } from '@/services/newsService';
 import ShowMoreNews from '@/components/ShowMoreNews';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
+import { useQuery } from 'react-query';
 
 export default function Series() {
   const router = useRouter();
   const [seriesNews, setSeriesNews] = useState<INews[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
   const itemsPerPage = 600;
 
+  const { data, isLoading, isError, error, refetch } = useQuery(
+    ['series', { type: 'noticia', page }],
+    () => fetchNews({ type: 'noticia', page, itemsPerPage }),
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const totalPages = data?.totalPages || 0;
+
   useEffect(() => {
-    const loadNews = async () => {
-      try {
-        const newsResponse = await fetchNews({ type: 'noticia', page, itemsPerPage });
-        setTotalPages(newsResponse.totalPages);
+    if (data?.items) {
+      const filteredNews = data.items.filter((newsItem) =>
+        newsItem.editorias.includes('seriesespeciais')
+      );
 
-        const filteredNews = newsResponse.items.filter((newsItem) =>
-          newsItem.editorias.includes('seriesespeciais')
-        );
-
-        if (page > 1) {
-          setSeriesNews((prevNews) => [...prevNews, ...filteredNews]);
-        } else {
-          setSeriesNews(filteredNews);
-        }
-      } catch (error) {
-        console.error('Error fetching news:', error);
+      if (page > 1) {
+        setSeriesNews((prevNews) => [...prevNews, ...filteredNews]);
+      } else {
+        setSeriesNews(filteredNews);
       }
-    };
+    }
+  }, [data, page]);
 
-    loadNews();
-  }, [page]);
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    refetch();
+  };
+
+  const handleNewsClick = (newsItem: INews) => {
+    localStorage.setItem('selectedNewsItem', JSON.stringify(newsItem));
+    router.push(`/series/${newsItem.id}`);
+  };
+
+  if (isError) {
+    return <div>Error: {error as string}</div>;
+  }
+
+  if (isLoading || seriesNews?.length === 0) {
+    return <Loading />;
+  }
 
   const renderNewsItem = (newsItem: INews) => (
     <div key={newsItem.id} className='group' onClick={() => handleNewsClick(newsItem)}>
@@ -47,19 +67,6 @@ export default function Series() {
       </div>
     </div>
   );
-
-  if (seriesNews.length === 0) {
-    return <Loading />;
-  }
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleNewsClick = (newsItem: INews) => {
-    localStorage.setItem('selectedNewsItem', JSON.stringify(newsItem));
-    router.push(`/ibge/${newsItem.id}`);
-  };
 
   return (
     <LayoutDefault>
@@ -80,7 +87,7 @@ export default function Series() {
               />
 
               <div className='absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white'>
-                <div className='text-3xl lg:text-3xl md:text-xxl sm:text-xl xs:text-sm max-w-full font-semibold'>
+                <div className='text-xl lg:text-3xl md:text-xxl sm:text-xl xs:text-sm max-w-full font-semibold'>
                   {seriesNews[0].titulo}
                 </div>
               </div>

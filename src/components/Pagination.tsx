@@ -50,20 +50,20 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: IPaginationProps)
 
   return (
     <>
-      <div className='flex flex-wrap justify-center mt-4'>
+      <div className='flex flex-wrap justify-center items-center mt-4 gap-1'>
         <button
           onClick={() => handlePageChange(1)}
           disabled={currentPage === 1}
-          className='px-2 py-1 rounded-full bg-green-500 text-white mb-2 sm:mr-2'
+          className='px-2 py-1 w-16 rounded-full bg-green-500 text-white'
         >
           Início
         </button>
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={`px-2 py-1 rounded-full ${
+          className={`px-2 py-1 w-16 rounded-full ${
             currentPage === 1 ? 'bg-gray-300 text-white' : 'bg-blue-500 text-white'
-          } mb-2 sm:mr-2`}
+          }`}
         >
           Anterior
         </button>
@@ -71,16 +71,16 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: IPaginationProps)
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={`px-2 py-1 rounded-full ${
+          className={`px-2 py-1 w-16 rounded-full ${
             currentPage === totalPages ? 'bg-gray-300 text-white' : 'bg-blue-500 text-white'
-          } mb-2 sm:mr-2`}
+          }`}
         >
           Próxima
         </button>
         <button
           onClick={() => handlePageChange(totalPages)}
           disabled={currentPage === totalPages}
-          className='px-2 py-1 rounded-full bg-green-500 text-white mb-2 sm:mr-2'
+          className='px-2 py-1 w-16 rounded-full bg-green-500 text-white'
         >
           Fim
         </button>
