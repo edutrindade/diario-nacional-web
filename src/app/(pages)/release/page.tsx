@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import LayoutDefault from '@/app/LayoutDefault';
-import Image from 'next/image';
 import { INews } from '@/interface/INews';
 import { fetchNews } from '@/services/newsService';
 import { useRouter } from 'next/navigation';
@@ -15,15 +14,27 @@ export default function Releases() {
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const itemsPerPage = 36;
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 560);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  useEffect(() => {
+    setIsSmallScreen(window.innerWidth < 560);
+
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 560);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const loadNews = async () => {
       try {
         const newsResponse = await fetchNews({ type: 'release', page, itemsPerPage });
         setTotalPages(newsResponse.totalPages);
-
-        console.log('news:', newsResponse);
 
         setReleases(newsResponse.items);
       } catch (error) {

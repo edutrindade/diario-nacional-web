@@ -1,4 +1,4 @@
-import { INewsResponse } from '@/interface/INews';
+import { INewsResponseProps } from '@/interface/INews';
 
 export interface FetchNewsOptions {
   type: string;
@@ -8,7 +8,7 @@ export interface FetchNewsOptions {
   search?: string;
 }
 
-export async function fetchNews(options: FetchNewsOptions): Promise<INewsResponse> {
+export async function fetchNews(options: FetchNewsOptions): Promise<INewsResponseProps> {
   const { type = 'noticia', page, itemsPerPage, from, search } = options;
   let url = `http://servicodados.ibge.gov.br/api/v3/noticias/?tipo=${type}`;
 

@@ -13,7 +13,7 @@ export interface INews {
   link: string;
 }
 
-export interface INewsResponse {
+export interface INewsResponseProps {
   count: number;
   page: number;
   totalPages: number;

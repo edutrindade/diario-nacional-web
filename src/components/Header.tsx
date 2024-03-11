@@ -1,17 +1,20 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 import Input from './Input';
 import { useQuery } from 'react-query';
 import { fetchNews } from '@/services/newsService';
-import { INews } from '@/interface/INews';
 import Alert from './Alert';
 
 const Header = () => {
   const router = useRouter();
-  const [news, setNews] = useState<INews[]>([]);
+  const {
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [noResults, setNoResults] = useState(false);
 
@@ -22,11 +25,19 @@ const Header = () => {
     day: 'numeric',
   });
 
-  const handleResize = () => {
-    setIsSmallScreen(window.innerWidth < 768);
-  };
+  useEffect(() => {
+    setIsSmallScreen(window.innerWidth < 560);
 
-  window.addEventListener('resize', handleResize);
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 560);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const { data, isLoading, refetch } = useQuery(
     ['search', { type: 'noticia' }],
@@ -50,18 +61,21 @@ const Header = () => {
     refetch();
   };
 
+  const onSubmit = () => {
+    handleSearch();
+  };
+
   useEffect(() => {
     if (data?.items && data?.items.length > 0) {
       const search = searchQuery.toLowerCase();
       setSearchQuery('');
-      console.log('data', data);
       localStorage.setItem('news', JSON.stringify(data.items));
       router.push(`/news/search/${search}`);
       setNoResults(false);
     } else {
       setNoResults(true);
     }
-  }, [data?.items]);
+  }, [data?.items, router, searchQuery]);
 
   setTimeout(() => {
     if (showAlert) setShowAlert(false);
@@ -77,7 +91,7 @@ const Header = () => {
               placeholder='Pesquisar...'
               value={searchQuery}
               onChange={handleSearchChange}
-              onSearch={handleSearch}
+              onSearch={handleSubmit(onSubmit)}
               isLoading={isLoading}
             />
           </div>
@@ -98,7 +112,7 @@ const Header = () => {
         />
       )}
 
-      {noResults && (
+      {noResults && data?.items && (
         <Alert message='Nenhum resultado encontrado.' onClose={() => setNoResults(false)} />
       )}
     </>

@@ -13,7 +13,6 @@ const NewsSearchPage = () => {
   useEffect(() => {
     const storedNews = localStorage.getItem('news');
     if (storedNews) {
-      console.log('storedNews', storedNews);
       setNews(JSON.parse(storedNews));
     }
   }, []);
@@ -35,8 +34,6 @@ const NewsSearchPage = () => {
   if (!news || news.length === 0) {
     return <Loading />;
   }
-
-  console.log('news', news);
 
   return (
     <LayoutDefault>

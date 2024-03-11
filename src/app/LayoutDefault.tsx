@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CurrencyInfo from '@/components/CurrencyInfo';
 import Header from '@/components/Header';
 import Navbar from '@/components/Navbar';
@@ -10,14 +10,22 @@ interface LayoutProps {
 }
 
 const LayoutDefault = ({ children }: LayoutProps) => {
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleResize = () => {
-    setIsSmallScreen(window.innerWidth < 768);
-  };
+  useEffect(() => {
+    setIsSmallScreen(window.innerWidth < 560);
 
-  window.addEventListener('resize', handleResize);
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 560);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);

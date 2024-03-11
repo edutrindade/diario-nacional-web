@@ -1,4 +1,4 @@
-import { CurrencyData, CurrencyResponse } from '@/interface/ICurrency';
+import { CurrencyResponse } from '@/interface/ICurrency';
 
 async function fetchCurrencyData(currencies: string): Promise<CurrencyResponse> {
   try {

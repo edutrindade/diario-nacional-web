@@ -1,4 +1,4 @@
-import { IAlertProps } from '@/interface/IAlertProps';
+import { IAlertProps } from '@/interface/IAlert';
 import React from 'react';
 
 const Alert = ({ message, onClose }: IAlertProps) => {
