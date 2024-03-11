@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Diário de Notícias
 
-First, run the development server:
+Diário de Notícias é um projeto web que oferece acesso fácil e rápido às últimas notícias disponíveis na API de Notícias do IBGE. Com um design intuitivo e componentes bem estruturados, o Diário de Notícias permite aos usuários ficarem atualizados com as informações mais relevantes do momento.
+
+## Instalação
+
+Para começar, certifique-se de ter o Node.js instalado em seu computador. Em seguida, clone o repositório do projeto e instale as dependências usando npm, yarn ou pnpm:
+
+```bash
+npm install
+# ou 
+yarn install
+# ou
+pnpm install 
+```
+
+## Rodando o projeto localmente
+
+Após a instalação das dependências, você pode iniciar o servidor de desenvolvimento localmente. Basta executar um dos seguintes comandos:
 
 ```bash
 npm run dev
-# or
+# ou 
 yarn dev
-# or
+# ou 
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Em seguida, abra seu navegador e acesse [http://localhost:3000](http://localhost:3000/) para visualizar o projeto.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Sobre o Projeto
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+O Diário de Notícias tem como objetivo fornecer um ambiente amigável para os usuários se manterem informados sobre os acontecimentos mais recentes publicados pelo IBGE. Ele oferece uma página inicial onde os usuários podem visualizar as últimas notícias e carregar mais notícias conforme desejarem. Além disso, o projeto conta com páginas dedicadas a diferentes editorias, como "Estatísticas Sociais", "Estatísticas Econômicas", "Geociências", "IBGE" e "Séries Especiais".
 
-## Learn More
+![Home](https://r2.easyimg.io/idsyoavmd/diariodenoticias.jpeg "Home")
 
-To learn more about Next.js, take a look at the following resources:
+Para uma experiência mais fluida, implementei diversos componentes, incluindo Alert, Header, Input, Loading, Navbar, Pagination, PaginationMobile, ShowMoreNews e um componente extra chamado CurrencyInfo. Este último é um extra que consome uma API de conversão de moedas para mostrar o valor atual do Dólar, Euro e Bitcoin, dando mais cara de jornal informativo ao Diário de Notícias.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Eventualmente, caso fosse um projeto a ser enviado para produção, seriam tratadas variáveis de ambiente e ambientes de desenvolvimento separados. Não senti necessidade pela simplicidade do serviço utilizado.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Principais Dependências
 
-## Deploy on Vercel
+* **Next.js** : Utilizei o Next.js para construir o projeto devido à sua capacidade de renderização do lado do servidor, facilitando a construção de aplicações web eficientes e escaláveis, além de ser uma das exigências do desafio atendido.
+* **React Query** : O React Query facilita a busca e o gerenciamento de dados provenientes da API, garantindo uma experiência de usuário mais fluida e responsiva.
+* **React Hook Form** : Implementei o React Hook Form para lidar com o campo de pesquisa, tornando o processo de busca mais simples e interativo para os usuários.
+* **Tailwind CSS** : Optei pelo Tailwind CSS para estilizar o projeto devido à sua abordagem baseada em classes e sua ampla gama de utilitários de estilo, permitindo uma estilização rápida e consistente dos componentes.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Devido ao curto prazo para submissão da aplicação, muita coisa foi deixada para aperfeiçoar no futuro. Novos filtros por data, por exemplo, ou uma refatoração de componente único para lidar com cada redirecionamento de página, dentre outros. Entretanto, busquei simular como se cada página aberta possuísse sua própria regra de negócio, isolando assim os temas (editorias). No mais, contribuições e Pull Requests são sempre bem-vindas.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Deploy com Vercel
+
+Para visualizar o projeto acesse [https://diario-nacional-web.vercel.app/](). 
+
+Obrigado pela visita 😁 !
