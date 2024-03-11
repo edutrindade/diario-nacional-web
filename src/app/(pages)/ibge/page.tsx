@@ -48,7 +48,11 @@ export default function Social() {
   }
 
   if (isLoading || ibgeNews?.length === 0) {
-    return <Loading />;
+    return (
+      <LayoutDefault>
+        <Loading />
+      </LayoutDefault>
+    );
   }
 
   const handleNewsClick = (newsItem: INews) => {

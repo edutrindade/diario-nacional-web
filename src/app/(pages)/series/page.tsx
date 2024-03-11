@@ -55,7 +55,11 @@ export default function Series() {
   }
 
   if (isLoading || seriesNews?.length === 0) {
-    return <Loading />;
+    return (
+      <LayoutDefault>
+        <Loading />
+      </LayoutDefault>
+    );
   }
 
   const renderNewsItem = (newsItem: INews) => (

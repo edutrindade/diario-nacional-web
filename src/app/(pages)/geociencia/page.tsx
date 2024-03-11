@@ -45,8 +45,12 @@ export default function Geociencia() {
     refetch();
   };
 
-  if (geosciencsNews.length === 0) {
-    return <Loading />;
+  if (isLoading || geosciencsNews?.length === 0) {
+    return (
+      <LayoutDefault>
+        <Loading />
+      </LayoutDefault>
+    );
   }
 
   const handleNewsClick = (newsItem: INews) => {

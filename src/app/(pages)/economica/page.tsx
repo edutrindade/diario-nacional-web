@@ -49,7 +49,11 @@ export default function Economica() {
   );
 
   if (economicNews.length === 0) {
-    return <Loading />;
+    return (
+      <LayoutDefault>
+        <Loading />
+      </LayoutDefault>
+    );
   }
 
   const handlePageChange = (newPage: number) => {

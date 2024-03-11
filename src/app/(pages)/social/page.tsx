@@ -53,7 +53,11 @@ export default function Social() {
   }
 
   if (isLoading || socialNews?.length === 0) {
-    return <Loading />;
+    return (
+      <LayoutDefault>
+        <Loading />
+      </LayoutDefault>
+    );
   }
 
   const renderNewsItem = (newsItem: INews) => (
