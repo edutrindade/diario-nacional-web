@@ -33,7 +33,9 @@ Em seguida, abra seu navegador e acesse [http://localhost:3000](http://localhost
 
 O Diário de Notícias tem como objetivo fornecer um ambiente amigável para os usuários se manterem informados sobre os acontecimentos mais recentes publicados pelo IBGE. Ele oferece uma página inicial onde os usuários podem visualizar as últimas notícias e carregar mais notícias conforme desejarem. Além disso, o projeto conta com páginas dedicadas a diferentes editorias, como "Estatísticas Sociais", "Estatísticas Econômicas", "Geociências", "IBGE" e "Séries Especiais".
 
-![Home](https://r2.easyimg.io/idsyoavmd/diariodenoticias.jpeg "Home")
+![Home](https://i.ibb.co/7Wnn0J9/Design01.png "Home")
+
+![New](https://i.ibb.co/Ld4GvrQ/Design02.png "New")
 
 Para uma experiência mais fluida, implementei diversos componentes, incluindo Alert, Header, Input, Loading, Navbar, Pagination, PaginationMobile, ShowMoreNews e um componente extra chamado CurrencyInfo. Este último é um extra que consome uma API de conversão de moedas para mostrar o valor atual do Dólar, Euro e Bitcoin, dando mais cara de jornal informativo ao Diário de Notícias.
 
@@ -50,6 +52,6 @@ Devido ao curto prazo para submissão da aplicação, muita coisa foi deixada pa
 
 ## Deploy com Vercel
 
-Para visualizar o projeto acesse [https://diario-nacional-web.vercel.app/](). 
+Para visualizar o projeto acesse [https://diario-nacional-web.vercel.app/](https://diario-nacional-web.vercel.app). 
 
 Obrigado pela visita 😁 !
